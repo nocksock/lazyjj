@@ -604,13 +604,17 @@ impl Component for LogTab<'_> {
                             match line_head {
                                 Some(line_change) => {
                                     if line_change == &self.head {
-                                        line = line.bg(self.config.highlight_color());
+                                        line = line
+                                            .bg(self.config.highlight_color_bg())
+                                            .fg(self.config.highlight_color_fg());
 
                                         line.spans = line
                                             .spans
                                             .iter_mut()
                                             .map(|span| {
-                                                span.to_owned().bg(self.config.highlight_color())
+                                                span.to_owned()
+                                                    .bg(self.config.highlight_color_bg())
+                                                    .fg(self.config.highlight_color_fg())
                                             })
                                             .collect();
                                     }
@@ -676,7 +680,8 @@ impl Component for LogTab<'_> {
                 .border_style(Style::default().fg(Color::Green))
                 .selected_button_style(
                     Style::default()
-                        .bg(self.config.highlight_color())
+                        .bg(self.config.highlight_color_bg())
+                        .fg(self.config.highlight_color_fg())
                         .underlined(),
                 );
             f.render_stateful_widget(popup, area, &mut self.popup);

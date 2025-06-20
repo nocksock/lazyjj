@@ -215,7 +215,11 @@ impl Component for BookmarkSetPopup<'_> {
 
             let list = List::new(list_items)
                 .scroll_padding(3)
-                .highlight_style(Style::default().bg(self.config.highlight_color()));
+                .highlight_style(
+                    Style::default()
+                        .bg(self.config.highlight_color_bg())
+                        .fg(self.config.highlight_color_fg())
+                );
 
             f.render_stateful_widget(list, popup_chunks[0], &mut self.list_state);
             self.list_height = popup_chunks[0].height;

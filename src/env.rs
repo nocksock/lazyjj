@@ -12,8 +12,10 @@ use crate::{
 // TODO: After 0.18, remove Config and replace with JjConfig
 #[derive(Deserialize, Debug, Clone, Default)]
 pub struct Config {
-    #[serde(rename = "lazyjj.highlight-color")]
-    lazyjj_highlight_color: Option<Color>,
+    #[serde(rename = "lazyjj.highlight-color_bg")]
+    lazyjj_highlight_color_bg: Option<Color>,
+    #[serde(rename = "lazyjj.highlight-color_fg")]
+    lazyjj_highlight_color_fg: Option<Color>,
     #[serde(rename = "lazyjj.diff-format")]
     lazyjj_diff_format: Option<DiffFormat>,
     #[serde(rename = "lazyjj.diff-tool")]
@@ -45,7 +47,8 @@ pub struct JjConfig {
 #[derive(Deserialize, Debug, Clone, Default)]
 #[serde(rename_all = "kebab-case")]
 pub struct JjConfigLazyjj {
-    highlight_color: Option<Color>,
+    highlight_color_bg: Option<Color>,
+    highlight_color_fg: Option<Color>,
     diff_format: Option<DiffFormat>,
     diff_tool: Option<String>,
     bookmark_prefix: Option<String>,
@@ -97,9 +100,12 @@ impl Config {
         None
     }
 
-    pub fn highlight_color(&self) -> Color {
-        self.lazyjj_highlight_color
-            .unwrap_or(Color::Rgb(50, 50, 150))
+    pub fn highlight_color_bg(&self) -> Color {
+        self.lazyjj_highlight_color_bg.unwrap_or(Color::Black)
+    }
+
+    pub fn highlight_color_fg(&self) -> Color {
+        self.lazyjj_highlight_color_fg.unwrap_or(Color::White)
     }
 
     pub fn bookmark_prefix(&self) -> String {
@@ -174,10 +180,14 @@ impl Env {
                 toml::from_str::<JjConfig>(&config_toml)
                     .context("Failed to parse jj config")
                     .map(|config| Config {
-                        lazyjj_highlight_color: config
+                        lazyjj_highlight_color_bg: config
                             .lazyjj
                             .as_ref()
-                            .and_then(|lazyjj| lazyjj.highlight_color),
+                            .and_then(|lazyjj| lazyjj.highlight_color_bg),
+                        lazyjj_highlight_color_fg: config
+                            .lazyjj
+                            .as_ref()
+                            .and_then(|lazyjj| lazyjj.highlight_color_fg),
                         lazyjj_diff_format: config
                             .lazyjj
                             .as_ref()

@@ -199,7 +199,9 @@ impl Component for CommandLogTab {
                         );
 
                     if self.commands_list_state.selected() == Some(i) {
-                        line = line.bg(self.config.highlight_color());
+                        line = line
+                            .bg(self.config.highlight_color_bg())
+                            .fg(self.config.highlight_color_fg());
                     }
 
                     line

@@ -75,7 +75,11 @@ pub fn ui(f: &mut Frame, app: &mut App) -> Result<()> {
                 .title(" Tabs ")
                 .border_type(BorderType::Rounded),
         )
-        .highlight_style(Style::default().bg(app.env.config.highlight_color()))
+        .highlight_style(
+            Style::default()
+                .bg(app.env.config.highlight_color_bg())
+                .fg(app.env.config.highlight_color_fg()),
+        )
         .select(
             Tab::VALUES
                 .iter()
